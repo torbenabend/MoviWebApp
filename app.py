@@ -2,6 +2,7 @@ from flask import Flask, redirect, request, url_for
 import os
 from data_manager import DataManager
 from models import db, Movie
+from data_fetcher import fetch_omdb_data
 
 
 app = Flask(__name__)
