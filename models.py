@@ -5,7 +5,7 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
-    __tablename__ = "Users"
+    __tablename__ = "users"
 
     user_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
@@ -15,14 +15,14 @@ class User(db.Model):
 
 
 class Movie(db.Model):
-    __tablename__ = "Movies"
+    __tablename__ = "movies"
 
     movie_id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(100), nullable=False)
     director = Column(String)
     year = Column(Integer)
     poster_url = Column(String)
-    user_id = Column(Integer, ForeignKey="Users.user_id")
+    user_id = Column(Integer, ForeignKey("users.user_id"))
 
     def __str__(self):
         return f"{self.title} ({self.year})"
