@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, url_for
+from flask import Flask, redirect, request, url_for, render_template
 import os
 from data_manager import DataManager
 from models import db, Movie
@@ -21,19 +21,25 @@ data_manager = DataManager()
 @app.route('/')
 def list_users():
     users = data_manager.get_users()
-    return str(users)  # Temporarily returning users as a string
+    return render_template("index.html", users=users)
 
 
 @app.route('/users', methods= ["POST"])
-def add_user():
+def create_user():
     new_username = request.form.get("username")
     data_manager.create_user(new_username)
     return redirect(url_for("list_users"))
 
 
 @app.route("/users/<int:user_id>/movies")
-def list_movies():
-    pass
+def list_movies(user_id):
+    users = data_manager.get_users()
+    username = next(
+        (user.name for user in users if user.user_id == user_id)
+    )
+    movies = data_manager.get_movies(user_id)
+    return render_template("movies.html", movies=movies, username=username)
+
 
 
 @app.route("/users/<int:user_id>/movies", methods=["POST"])
