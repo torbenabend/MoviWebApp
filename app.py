@@ -34,17 +34,27 @@ def create_user():
 @app.route("/users/<int:user_id>/movies")
 def list_movies(user_id):
     users = data_manager.get_users()
-    username = next(
-        (user.name for user in users if user.user_id == user_id)
+    user = next(
+        (user for user in users if user.user_id == user_id)
     )
     movies = data_manager.get_movies(user_id)
-    return render_template("movies.html", movies=movies, username=username)
+    return render_template("movies.html", movies=movies, user=user)
 
 
 
 @app.route("/users/<int:user_id>/movies", methods=["POST"])
 def add_movie(user_id):
-    pass
+    movie_title = request.form.get("movie_title")
+    title, director, year, poster_url = fetch_omdb_data(movie_title)
+    new_movie = Movie(
+        title=title,
+        director=director,
+        year=year,
+        poster_url=poster_url,
+        user_id=user_id
+    )
+    data_manager.add_movie(new_movie)
+    return redirect(url_for("list_movies", user_id=user_id))
 
 
 @app.route('/users/<int:user_id>/movies/<int:movie_id>/update', methods=['POST'])

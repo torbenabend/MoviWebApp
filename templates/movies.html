@@ -1,13 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Favorite movies of {{ username }}</h1>
+<h1>Favorite movies of {{ user.name }}</h1>
 <ul>
     {% for movie in movies %}
     <li class="movie-list">
         <p class="movie-entry">
-            {{ movie.title }} ({{ movie.year }}, directed by: {{ movie.director }})
+            {{ movie.title }} ({{ movie.year }}, directed by: {{ movie.director }}) <img src="{{ movie.poster_url }}">
         </p>
     </li>
     {% endfor %}
 </ul>
+<form action="{{ url_for('add_movie', user_id=user.user_id) }}" method="post">
+    <label for="movie_title">Enter movie title:</label>
+    <input type="text" id="movie_title" name="movie_title" required><br><br>
+    <input type="submit" value="Add movie">
+</form>
 {% endblock %}
