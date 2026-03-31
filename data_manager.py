@@ -31,3 +31,4 @@ class DataManager():
         db.session.query(Movie) \
         .filter(Movie.movie_id == movie_id) \
         .delete()
+        db.session.commit()
