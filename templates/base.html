@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>MoviWebApp</h1>
+    <h1 class="navbar-header">MoviWebApp</h1>
     <nav>
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Add movie</a></li>
-            <li><a href="#">Update movie</a></li>
-            <li><a href="#">Delete movie</a></li>
+            <li><a href="{{ url_for('list_users') }}" class="navbar">Home</a></li>
+            <li><a href="#" class="navbar">Add movie</a></li>
+            <li><a href="#" class="navbar">Update movie</a></li>
+            <li><a href="#" class="navbar">Delete movie</a></li>
         </ul>
     </nav>
     <main class="container">
