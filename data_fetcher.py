@@ -49,6 +49,8 @@ def fetch_omdb_data(title):
     if response.status_code != requests.codes.ok:
         print("Error:", response.status_code, response.text)
     movie_data = response.json()
+    if movie_data["Response"] == "False":
+        return {}
     return (
         movie_data["Title"],
         movie_data["Director"],

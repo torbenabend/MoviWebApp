@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, url_for, render_template
+from flask import flash, Flask, redirect, request, url_for, render_template
 import os
 from data_manager import DataManager
 from models import db, Movie
@@ -6,6 +6,7 @@ from data_fetcher import fetch_omdb_data
 
 
 app = Flask(__name__)
+app.secret_key = "secretkey"
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -45,15 +46,19 @@ def list_movies(user_id):
 @app.route("/users/<int:user_id>/movies", methods=["POST"])
 def add_movie(user_id):
     movie_title = request.form.get("movie_title")
-    title, director, year, poster_url = fetch_omdb_data(movie_title)
-    new_movie = Movie(
-        title=title,
-        director=director,
-        year=year,
-        poster_url=poster_url,
-        user_id=user_id
-    )
-    data_manager.add_movie(new_movie)
+    try:
+        title, director, year, poster_url = fetch_omdb_data(movie_title)
+        new_movie = Movie(
+            title=title,
+            director=director,
+            year=year,
+            poster_url=poster_url,
+            user_id=user_id
+        )
+        data_manager.add_movie(new_movie)
+    except ValueError:
+        flash("Movie not found in OMDb.", "error")
+
     return redirect(url_for("list_movies", user_id=user_id))
 
 
@@ -68,6 +73,11 @@ def update_movie(user_id, movie_id):
 def delete_movie(user_id, movie_id):
     data_manager.delete_movie(movie_id)
     return redirect(url_for("list_movies", user_id=user_id))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
 
 
 if __name__ == '__main__':
