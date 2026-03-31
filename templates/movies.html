@@ -7,6 +7,11 @@
         <p class="movie-entry">
             {{ movie.title }} ({{ movie.year }}, directed by: {{ movie.director }}) <img src="{{ movie.poster_url }}">
         </p>
+        <form action="{{ url_for('update_movie', user_id=user.user_id, movie_id=movie.movie_id) }}" method="post">
+            <label for="updated_title">Enter new movie title:</label>
+            <input type="text" id="updated_title" name="updated_title" required><br><br>
+            <input type="submit" value="Update movie title">
+        </form>
     </li>
     {% endfor %}
 </ul>
