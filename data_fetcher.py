@@ -1,13 +1,12 @@
 """
-Retrieve movie information from the OMDb API.
+Utility module for retrieving movie data from the OMDb API.
 
-This module loads an API key from environment variables and provides a
-function to request movie metadata from the OMDb web service. The
-returned information includes the movie title, release year,
-IMDb rating, and poster URL.
+This module loads an API key from environment variables and provides
+a function to fetch movie metadata such as title, director, release
+year, and poster URL. The OMDb API is accessed via HTTP requests using
+the requests library.
 
-Environment variables are loaded from a .env file using python-dotenv.
-The API key must be stored in the environment variable ``API_KEY``.
+The API key must be defined in the environment variable ``API_KEY``.
 """
 import requests
 import os
@@ -22,7 +21,7 @@ def fetch_omdb_data(title):
     """
     Fetch movie information from the OMDb API by title.
 
-    Sends an HTTP GET request to the OMDb API and retrieves selected
+    Sends an HTTP GET request to the OMDb API and extracts relevant
     metadata for a movie matching the provided title.
 
     Args:
@@ -30,18 +29,17 @@ def fetch_omdb_data(title):
 
     Returns:
         tuple[str, str, int, str]: A tuple containing:
-            - Title of the movie
-            - Director
-            - Release year
-            - URL to the poster image
+            - Movie title
+            - Director name
+            - Release year as an integer
+            - Poster image URL
+        dict: Empty dictionary if no movie is found.
 
     Raises:
-        requests.exceptions.Timeout: If the request exceeds the timeout
-        limit.
-        requests.exceptions.RequestException: If a general HTTP request
-        error occurs.
-        KeyError: If no movie is found, the response does not contain
-        movie data.
+        requests.exceptions.Timeout: If the request exceeds the timeout limit.
+        requests.exceptions.RequestException: If a general HTTP request error occurs.
+        KeyError: If expected fields are missing in the API response.
+        ValueError: If the year cannot be converted to an integer.
     """
     api_url = "https://www.omdbapi.com/"
     query_params = {"apikey": API_KEY, "t": title, "type": "movie"}
